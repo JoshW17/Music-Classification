@@ -31,7 +31,7 @@ plt.show()
 # the low tones (covering bass guitar, for example), and 120 Hz - 180 Hz and
 # 180 Hz - 300 Hz for the middle and higher tones (covering vocals and most other instruments)
 
-bins = [80, 120, 180, 300] # bins -> 0,1,2,3,4 / above 300 dont care
+bins = [80, 120, 180, 300] # bins -> 0,1,2,3 / above 300 dont care
 
 def getBin(freq): # gives us which bin of frequencies we are in
     i = 0
@@ -44,14 +44,14 @@ for freq in range(40,300):  # get the highest magnitude and its corresponding fr
     magnitude = abs(fft_result[freq])
     bin = getBin(freq)
     if magnitude > highestMag[bin][0]:
-        highestMag[bin][0] = magnitude
-        highestMag[bin][1] = freq
+        highestMag[bin][0] = magnitude # get the highest magnitude
+        highestMag[bin][1] = freq # corresponding frequency
 print(highestMag)
 
-FUZZ_FACTOR = 2
+FUZZ_FACTOR = 2 # assuse recorded in a not ideal room / give some wiggle
 
 def hash(h1, h2, h3, h4):
-    return (h4 - (h4 % FUZZ_FACTOR)) * 100000000 + (h3 - (h3 % FUZZ_FACTOR)) * 100000 + (h2 - (h2 % FUZZ_FACTOR)) * 100 + (h1 - (h1 % FUZZ_FACTOR))
+    return (h4 - (h4 % FUZZ_FACTOR)) * 100000000 + (h3 - (h3 % FUZZ_FACTOR)) * 100000 + (h2 - (h2 % FUZZ_FACTOR)) * 100 + (h1 - (h1 % FUZZ_FACTOR)) # generate a hash for the song or "fingerprint"
 
 fingerprint = hash(highestMag[0][1], highestMag[1][1], highestMag[2][1], highestMag[3][1])
 print(fingerprint)
