@@ -1,12 +1,14 @@
+from re import error
 import soundfile as sf
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
 class FrequencyAnalysis:
-    def __init__(self, filename, plot=False):
+    def __init__(self, filename, plot=False, window=False):
         self.filename=filename
         self.do_plot=plot
+        self.do_window=window
         self.time_domain_signal=None
         self.frequency_domain_signal=None
         self.windowed_frequency_domain_signal=None
@@ -16,6 +18,37 @@ class FrequencyAnalysis:
         self.window_overlap = 5
         self.bins=[40,80,120,180,300]
         self.fuzz=2
+
+        try:
+            self.read_file()
+            print("[LOG] -- Audio data read successfully.")
+            print(f"[LOG] -- Sample Rate: {self.sampling_rate}")
+        except Exception as e:
+            print(f"\033[91m[ERROR]\033[0m -- Error reading audio data: {e}")
+            # Should format [ERROR] in red.
+
+        if self.do_window == True:
+            try:
+                self.Windowed_FFT()
+                print("[LOG] -- Windowed FFT performed successfully.")
+                print(f"[LOG] -- Length of FFT signal: {len(self.windowed_frequency_domain_signal)}")
+            except Exception as e:
+                print("\033[91m[ERROR]\033[0m -- Error computing windowed FFT: {e}")
+        elif self.do_window == False:
+            try:
+                self.Full_FFT()
+                print("[LOG] -- Full FFT performed successfully")
+                print(f"[LOG] -- Length of FFT signal: {len(self.frequency_domain_signal)}")
+            except Exception as e:
+                print("\033[91m[ERROR]\033[0m -- Error computing full FFT: {e}")
+
+        try:
+            self.Fingerprint()
+            print("[LOG] -- Fingerprint calculated")
+            print(f"[LOG] -- Fingerprint Tag: {self.fingerprint_tag}")
+        except Exception as e:
+            print("\033[91m[ERROR]\033[0m -- Error finding fingerprint: {e}")
+        
         
     def read_file(self):
         try:
