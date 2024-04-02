@@ -123,7 +123,7 @@ class FrequencyAnalysis:
             h2_f=(h2-(h2%self.fuzz))*100
             h3_f=(h3-(h3%self.fuzz))*100000
             h4_f=(h4-(h4%self.fuzz))*100000000
-            return h4_f + h3_f + h2_f + h1_f
+            return [h4_f, h3_f, h2_f, h1_f]
             
             
         if self.windowed_frequency_domain_signal is not None:
@@ -155,17 +155,7 @@ def main():
 
 
     # Run Main Code
-    audio=FrequencyAnalysis(filename)
-    if audio.read_file():
-        print("Audio data read successfully.")
-        print(f"Sample Rate: {audio.sampling_rate}")
-    if audio.Full_FFT():
-        print("Full spectrum FFT computed successfully.")
-        print(f"Length: {len(audio.frequency_domain_signal)}")
-    audio.Fingerprint()
-    if audio.fingerprint_tag:
-        print(audio.fingerprint_tag)
-    
+    FrequencyAnalysis(filename)
 
 if __name__ == "__main__":
     main()
