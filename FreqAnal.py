@@ -118,7 +118,7 @@ class FrequencyAnalysis:
                     characterizations[bin][1]=freq
             return characterizations
 
-        def hash(h1, h2, h3, h4):
+        def hash(h1, h2, h3, h4) -> list[float]:
             h1_f=(h1-(h1%self.fuzz))
             h2_f=(h2-(h2%self.fuzz))*100
             h3_f=(h3-(h3%self.fuzz))*100000

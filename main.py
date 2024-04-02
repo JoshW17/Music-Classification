@@ -1,7 +1,5 @@
 from Song import Song
 import argparse
-import numpy as np
-from math import sqrt
 
 
 def compare_songs(song1: list[float], song2: list[float]) -> float:
