@@ -4,6 +4,7 @@ class MusicPlayer():
     def __init__(self, master):
         super().__init__()
         self.master=master
+        self.master.geometry("400x900")
         self.master.title("Music Player")
         
         # Create a frame to hold the widgets
@@ -19,6 +20,7 @@ class MusicPlayer():
     
 if __name__ == "__main__":
     root=ctk.CTk()
+
     MusicPlayer(root)
 
     root.mainloop()
