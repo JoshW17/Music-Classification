@@ -1,5 +1,6 @@
 from Data import ComparisonData, SongData
 from Song import Song
+from Player import Player
 import pandas as pd
 import argparse
 import math
@@ -85,8 +86,9 @@ def SortRecommendations(Name, ComparisonDataObject):
     df=df[ df['Song1'].str.contains(name) | df['Song2'].str.contains(name) ]
     # df.replace(name, pd.NA, inplace=True)
     df=df.sort_values(by='Distance', ascending=True)
-
+    
     print(df)
+    return df
 
 def main():
 
@@ -129,7 +131,7 @@ def main():
     
     print("\n[LOG] -- Completed Analysis\n")
 
-    SortRecommendations(args.file[0], ComparisonDataStorage)
+    df=SortRecommendations(args.file[0], ComparisonDataStorage)
 
 if __name__ == "__main__":
     main()
