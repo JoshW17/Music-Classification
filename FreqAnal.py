@@ -11,12 +11,15 @@ class FrequencyAnalysis:
         self.do_window=window
         self.time_domain_signal=None
         self.frequency_domain_signal=None
-        self.windowed_frequency_domain_signal=None
 
         # Alter these parameters to change performance
         self.window_size = 20 # I'm assuming this is measured in number of samples
         self.window_overlap = 5
-        self.bins=[40,80,120,180,300]
+        self.bin_frequencies=[60,240,500,2000,8000]
+        # Got new bin frequencies from this website
+        # https://www.petervis.com/hi-fi-info/jvc-sea-graphic-equalizers/frequency-spectrum-of-common-musical-instruments.html
+        # Represents superlows (0-60), lows (61-240), mids (241-500), highs (501-2000), and superhighs (2001-8000)
+        # This should do a better job representing a wider range of frequencies, since frequency is a logarithmic scale.
         self.fuzz=2
 
         try:
@@ -27,27 +30,31 @@ class FrequencyAnalysis:
             print(f"\033[91m[ERROR]\033[0m -- Error reading audio data: {e}")
             # Should format [ERROR] in red.
 
-        if self.do_window == True:
-            try:
-                self.Windowed_FFT()
-                print("[LOG] -- Windowed FFT performed successfully.")
-                print(f"[LOG] -- Length of FFT signal: {len(self.windowed_frequency_domain_signal)}")
-            except Exception as e:
-                print("\033[91m[ERROR]\033[0m -- Error computing windowed FFT: {e}")
-        elif self.do_window == False:
-            try:
-                self.Full_FFT()
-                print("[LOG] -- Full FFT performed successfully")
-                print(f"[LOG] -- Length of FFT signal: {len(self.frequency_domain_signal)}")
-            except Exception as e:
-                print("\033[91m[ERROR]\033[0m -- Error computing full FFT: {e}")
+        try:
+            self.FFT()
+            print("[LOG] -- Full FFT performed successfully")
+            print(f"[LOG] -- Length of FFT signal: {len(self.frequency_domain_signal)}")
+        except Exception as e:
+            print(f"\033[91m[ERROR]\033[0m -- Error computing full FFT: {e}")
 
         try:
             self.Fingerprint()
-            print("[LOG] -- Fingerprint calculated")
-            print(f"[LOG] -- Fingerprint Tag: {self.fingerprint_tag}")
+            print("[LOG] -- Characteristic Array calculated")
+            print(f"[LOG] -- Characteristic Array: {self.CharacteristicArray}")
         except Exception as e:
-            print("\033[91m[ERROR]\033[0m -- Error finding fingerprint: {e}")
+            print(f"\033[91m[ERROR]\033[0m -- Error finding Characteristic Array: {e}")
+
+    def CalcBinIndex(self, Freq):
+        """
+        Calculates the index at which a certain frequency (Hz) will appear. Rounds down.
+        Freq=(n*SampFreq)/TotalN, therefore at 44100 kHz with 1024 sample FFT, Bin 2 is 86.1 Hz.
+        I make an assumption here that this means that 86.1 is the upper limit to the frequencies contained in that bin.
+        """
+        SamplingFrequency=self.sampling_rate
+        TotalN=len(self.frequency_domain_signal)
+        BinNumber=(Freq*TotalN)/SamplingFrequency
+        BinNumber=int(BinNumber)
+        return BinNumber
         
         
     def read_file(self):
@@ -68,7 +75,7 @@ class FrequencyAnalysis:
             print(f"Error reading audio file: {e}")
             return False
 
-    def Full_FFT(self):
+    def FFT(self):
         if self.time_domain_signal is not None:
             self.frequency_domain_signal = np.fft.fft(self.time_domain_signal)
             return True
@@ -76,71 +83,46 @@ class FrequencyAnalysis:
             print("No audio data available. Read audio data first.")
             return False
 
-    def Windowed_FFT(self):
-        if self.time_domain_signal is not None:
-            num_chunks=int((len(self.time_domain_signal) - self.window_size) / (self.window_size - self.window_overlap)) + 1
-            self.windowed_frequency_domain_signal = np.zeros((num_chunks, self.window_size), dtype=np.complex128)
-
-            for i in range(num_chunks):
-                start=i*(self.window_size-self.window_overlap)
-                end=start+self.window_size
-                chunk=self.time_domain_signal[start:end]
-                self.windowed_frequency_domain_signal[i]=np.fft.fft(chunk)
-
-            return True
-        else:
-            print("No audio data available. Read audio data first")
-            return False
-
     def Fingerprint(self):
 
+        def get_bin_indeces() -> list[int]:
+            """
+            Takes the list of frequency breakpoints defined in self.bin_frequencies, and converts those to indeces in terms of the normalized FFT.
+            """
+            bins=[]
+            for freq in self.bin_frequencies:
+                index=self.CalcBinIndex(freq)
+                bins.append(index)
+            return bins
+        
         def get_bin(freq):
             i=0
             while i< len(self.bins) and self.bins[i]<freq:
                 i+=1
             return i
 
-        def window_characterize():
-            characterizations=[]
-            for window in self.windowed_frequency_domain_signal:
-                window_characterization=[]
-                for freq in range(self.bins[0], self.bins[-1]):
-                    mag=abs(window[freq])
-                    print(mag)
-
         def characterize():
-            characterizations=[[0,0] for _ in range(len(self.bins))]
+            characterizations=[[0,0,0] for _ in range(len(self.bins))]
+            bin_values=[ [0,0] for _ in range(len(self.bins)) ]
             for freq in range(self.bins[0], self.bins[-1]):
                 magnitude=np.log(np.abs(self.frequency_domain_signal[freq]))
                 bin=get_bin(freq)
                 if magnitude > characterizations[bin][0]:
                     characterizations[bin][0]=magnitude
                     characterizations[bin][1]=freq
-            return characterizations
+                    bin_values[bin][0]=np.abs(self.frequency_domain_signal[freq])
+                    bin_values[bin][1]=np.angle(self.frequency_domain_signal[freq])
+                    # Create an array of polar coordinates. These polar coordinates represent the BIN with the largest magnitude per SEGMENT.
+            return bin_values
 
-        def hash(h1, h2, h3, h4) -> list[float]:
-            h1_f=(h1-(h1%self.fuzz))
-            h2_f=(h2-(h2%self.fuzz))*100
-            h3_f=(h3-(h3%self.fuzz))*100000
-            h4_f=(h4-(h4%self.fuzz))*100000000
-            return [h4_f, h3_f, h2_f, h1_f]
+        self.bins=get_bin_indeces()
             
-            
-        if self.windowed_frequency_domain_signal is not None:
-            result=window_characterize()
-        elif self.frequency_domain_signal is not None:
+        if self.frequency_domain_signal is not None:
             result=characterize()
+            # print(result)
 
         if result is not None:
-            for item in result:
-                if isinstance(item, list):
-                    self.fingerprint_tag=hash(result[0][1], result[1][1], result[2][1], result[3][1])
-                else:
-                    print("I have't figured out dimensions for the windowed fft yet")
-                
-            # for window in result:
-                # print(window)
-                # hash(window[1][1], window[2][1], window[3][1], window[4][1])
+            self.CharacteristicArray=result
 
 
         
@@ -155,7 +137,7 @@ def main():
 
 
     # Run Main Code
-    FrequencyAnalysis(filename)
-
+    audio=FrequencyAnalysis(filename)
+    # print(audio.frequency_domain_signal)
 if __name__ == "__main__":
     main()
