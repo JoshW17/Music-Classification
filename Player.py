@@ -1,11 +1,24 @@
 import customtkinter as ctk
 
-class MusicPlayer(ctk.CTk):
-    def __init__(self):
+class MusicPlayer():
+    def __init__(self, master):
         super().__init__()
-        self.title("Music Player")
-
-
-
+        self.master=master
+        self.master.title("Music Player")
+        
+        # Create a frame to hold the widgets
+        self.frame = ctk.CTkFrame(self.master)
+        self.frame.pack(padx=20, pady=20)
+        
+        self.frame_top=ctk.CTkFrame(self.frame, height=40)
+        self.frame_top.pack(side="top", expand=True, fill="x")
+    
+    def play_music(self):
+        # Add your logic here to play the selected music file
+        print("Playing music...")
+    
 if __name__ == "__main__":
-    Player=MusicPlayer()
+    root=ctk.CTk()
+    MusicPlayer(root)
+
+    root.mainloop()
