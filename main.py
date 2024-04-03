@@ -1,6 +1,5 @@
 from Data import ComparisonData, SongData
 from Song import Song
-import numpy as np
 import pandas as pd
 import argparse
 import math
@@ -56,55 +55,61 @@ def Scan(directory, SongDataObject, ComparisonDataObject):
                     print(f"[STATUS] -- Song: {filename} already processed, skipping.")
 
 def Compare(Name1, PolarArray1, Name2, PolarArray2, ComparisonDataObject):
-    distance=[]
 
+    # === Compare Frequency Composition ===
+    distance=[]
     # Convert Polar to Cartesian
     for polar1, polar2 in zip(PolarArray1, PolarArray2):
         mag1,phase1=polar1[0],polar1[1]
         mag2,phase2=polar2[0],polar2[1]
-
         x1=mag1*math.cos(math.radians(phase1))
         x2=mag2*math.cos(math.radians(phase2))
         y1=mag1*math.sin(math.radians(phase1))
         y2=mag2*math.sin(math.radians(phase2))
-
         d=math.sqrt((x2-x1)**2 + (y2-y1)**2)
-
         distance.append(d)
-
     distance=sum(distance)/len(distance)
-    Result=ComparisonDataObject.add_comparison(Name1, Name2, distance)
+    Result=ComparisonDataObject.add_freqdata(Name1, Name2, distance)
     ComparisonDataObject.write()
-    return Result
 
 def SortRecommendations(Name, ComparisonDataObject):
-    data=ComparisonDataObject.storage
+
+    # === Data to Compare ===
+    FreqData=ComparisonDataObject.storage[0]
     name=os.path.basename(Name)
-    df=pd.DataFrame(data, columns=['Song1', 'Song2', 'Distance'])
-    filtered=df[ df['Song1'].str.contains(name) | df['Song2'].str.contains(name) ]
-    sorted=filtered.sort_values(by='Distance')
-    print(sorted)
+
+    # === Form DataFrame ===
+    df=pd.DataFrame(FreqData, columns=['Song1', 'Song2', 'Distance'])
+
+    # === Sort and remove bad values ===
+    df=df[ df['Song1'].str.contains(name) | df['Song2'].str.contains(name) ]
+    # df.replace(name, pd.NA, inplace=True)
+    df=df.sort_values(by='Distance', ascending=True)
+
+    print(df)
 
 def main():
 
-    # Load persistant storage
+    # === Load persistant storage ===
     SongDataStorage=SongData(SongFile)
-
     if os.path.exists(SongFile):
         SongDataStorage.load()
-
     ComparisonDataStorage=ComparisonData(CompFile)
-
     if os.path.exists(CompFile):
         ComparisonDataStorage.load()
 
-    # Parse Command Line Arguments
+    # === Parse Command Line Arguments ===
     parser=argparse.ArgumentParser(description="Compare the similarity of two songs.")
-    parser.add_argument('-f', '--file', nargs=1, metavar='First File', help="Files to compare")
+    parser.add_argument('-f', '--file', nargs=1, metavar='filename', help="Files to compare")
     parser.add_argument('-S', '--Scan', metavar='directory', help='Directory to scan for songs')
+    parser.add_argument('-p', '--play', action='store_true', help='Play a playlist')
     args=parser.parse_args()
-    
-    # Scan directory with -S option
+
+    # === Choose to create or load a playlist. Play that playlist. ===
+    if args.play:
+        print("PLAY THINGS")
+        
+    # === Scan directory with -S option ===
     if args.Scan:
         directory=args.Scan
         if os.path.isdir(directory):
