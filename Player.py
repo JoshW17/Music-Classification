@@ -1,6 +1,13 @@
 import customtkinter as ctk
+import pyglet
+
+class Player():
+    """Media player to handle MP3 files and audio output"""
+    
+
 
 class MusicPlayer():
+    """GUI Media Player to allow user interface"""
     def __init__(self, master):
         super().__init__()
         self.master=master
