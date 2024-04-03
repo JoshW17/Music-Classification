@@ -47,7 +47,7 @@ class MusicPlayer:
         self.master.geometry("400x900")
         self.master.title("Music Player")
         
-        # Create a frame to hold the widgets
+        # Create a frame to hold the widgets (Dan)
         self.frame = ctk.CTkFrame(self.master)
         self.frame.pack(padx=20, pady=20)
         
