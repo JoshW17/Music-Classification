@@ -1,5 +1,6 @@
 from Data import ComparisonData, SongData
 from Song import Song
+from PlayerBackend import PlayerBackend
 import pandas as pd
 import argparse
 import math
@@ -83,10 +84,26 @@ def SortRecommendations(Name, ComparisonDataObject):
 
     # === Sort and remove bad values ===
     df=df[ df['Song1'].str.contains(name) | df['Song2'].str.contains(name) ]
-    # df.replace(name, pd.NA, inplace=True)
-    df=df.sort_values(by='Distance', ascending=True)
 
-    print(df)
+    concat=[]
+    for index, row in df.iterrows():
+        if row.iloc[0] != name:
+            concat.append((row.iloc[0], row.iloc[2]))
+        if row.iloc[1] != name:
+            concat.append((row.iloc[1], row.iloc[2]))
+
+    new_df=pd.DataFrame(concat, columns=['Song', 'Distance'])
+    new_df=new_df.sort_values(by='Distance', ascending=True)
+    
+    print(new_df)
+    return new_df
+
+def PlaylistFromDataframe(df):
+    playlist=[]
+    for file in df['Song']:
+        path=os.path.join('assets', file)
+        playlist.append(path)
+    return playlist
 
 def main():
 
@@ -105,9 +122,7 @@ def main():
     parser.add_argument('-p', '--play', action='store_true', help='Play a playlist')
     args=parser.parse_args()
 
-    # === Choose to create or load a playlist. Play that playlist. ===
-    if args.play:
-        print("PLAY THINGS")
+
         
     # === Scan directory with -S option ===
     if args.Scan:
@@ -129,7 +144,15 @@ def main():
     
     print("\n[LOG] -- Completed Analysis\n")
 
-    SortRecommendations(args.file[0], ComparisonDataStorage)
+    df=SortRecommendations(args.file[0], ComparisonDataStorage)
+
+    # === Choose to create or load a playlist. Play that playlist. ===
+    if args.play:
+        player=PlayerBackend()
+        playlist=PlaylistFromDataframe(df)
+        player.load_playlist(playlist)
+        player.play_playlist()
+        player.persist_playlist()
 
 if __name__ == "__main__":
     main()
