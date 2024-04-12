@@ -16,7 +16,7 @@ class MusicPlayer:
         label.pack(padx=0,pady=0)
 
         # The frame to hold the album cover 
-        self.frame_album_cover=ctk.CTkFrame(self.player_frame, fg_color="#5a4")
+        self.frame_album_cover=ctk.CTkFrame(self.player_frame, fg_color="#5a4", width=300, height=300)
         self.frame_album_cover.pack(side="top", fill="x",padx=(10))
 
         # The frame to hold the playlist 
@@ -43,15 +43,19 @@ class MusicPlayer:
         # tree.pack(side='left', fill='both', expand=True)
         # scrollbar.pack(side='right', fill='y')
 
+        # Button Frame
+        self.button_frame=ctk.CTkFrame(self.player_frame)
+        self.button_frame.pack(side="top", fill="x", expand=True)
+        
         # Forward button
-        forward = ctk.CTkButton(master=self.player_frame, text=" ---> ")
-        forward.pack(padx=20, pady=10)
+        forward = ctk.CTkButton(master=self.button_frame, text=" ---> ")
+        forward.pack(padx=20, pady=10, side="left")
         # Pause button
-        pause = ctk.CTkButton(master=self.player_frame, text=" | | ")
-        pause.pack(padx=20, pady=10)
+        pause = ctk.CTkButton(master=self.button_frame, text=" | | ")
+        pause.pack(padx=20, pady=10, side="left")
         # Back button 
-        back = ctk.CTkButton(master=self.player_frame, text=" <--- ")
-        back.pack(padx=20, pady=10)
+        back = ctk.CTkButton(master=self.button_frame, text=" <--- ")
+        back.pack(padx=20, pady=10, side="left")
         
     def play_music(self):
         # Add your logic here to play the selected music file
