@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 class FrequencyAnalysis:
     def __init__(self, filename, plot=False, window=False):
         self.filename=filename
