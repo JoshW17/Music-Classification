@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.3.25)  14 APR 2024 17:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.3.25)  16 APR 2024 11:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -286,49 +286,66 @@ Package grfext Info: Graphics extension search list:
 (/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
-))
-Underfull \vbox (badness 2057) has occurred while \output is active []
-
- [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fo
-nts/enc/dvips/base/8r.enc}
+)) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/
+fonts/enc/dvips/base/8r.enc}
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 81--83
+Underfull \hbox (badness 10000) in paragraph at lines 84--86
 []\OT1/ptm/m/n/10 https://www.music-tomorrow.com/blog/how-spotify-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--83
+Underfull \hbox (badness 10000) in paragraph at lines 84--86
 \OT1/ptm/m/n/10 recommendation-system-works-a-complete-guide-2022
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--83
+Underfull \hbox (badness 10000) in paragraph at lines 84--86
 \OT1/ptm/m/n/10 https://www.toptal.com/algorithms/shazam-it-music-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 84--87
+Underfull \hbox (badness 10000) in paragraph at lines 87--90
 []\OT1/ptm/m/n/10 https://dsp.stackexchange.com/questions/5915/what-is-the-
  []
 
 
-Overfull \hbox (42.2367pt too wide) in paragraph at lines 84--87
+Overfull \hbox (42.2367pt too wide) in paragraph at lines 87--90
 \OT1/ptm/m/n/10 meaning-of-the-dft https://dsp.stackexchange.com/questions/2692
 7/what-
  []
 
 
-Overfull \hbox (24.95718pt too wide) in paragraph at lines 84--87
+Overfull \hbox (24.95718pt too wide) in paragraph at lines 87--90
 \OT1/ptm/m/n/10 is-a-frequency-bin https://stackoverflow.com/questions/10754549
 /fft-
  []
 
 
-Overfull \hbox (86.78693pt too wide) in paragraph at lines 88--89
+Overfull \hbox (86.78693pt too wide) in paragraph at lines 91--92
 []\OT1/ptm/m/n/10 https://pythonnumericalmethods.studentorg.berkeley.edu/notebo
 oks/chapter24.03-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
+[]\OT1/ptm/m/n/10 https://muted.io/note-frequencies/
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
+\OT1/ptm/m/n/10 https://rwu.pressbooks.pub/musictheory/chapter/major-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
+\OT1/ptm/m/n/10 scales/ https://people.umass.edu/gmhwww/382/pdf/12-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
+\OT1/ptm/m/n/10 musichttps://www.onlinepianocoach.com/common-music-
  []
 
 
@@ -342,9 +359,7 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[2
-
-] (./Report.aux)
+[2] (./Report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
@@ -353,11 +368,11 @@ L3 programming layer <2024-02-20>
 Here is how much of TeX's memory you used:
  3488 strings out of 476076
  58709 string characters out of 5793775
- 1944187 words of memory out of 5000000
+ 1946187 words of memory out of 5000000
  25573 multiletter control sequences out of 15000+600000
  587890 words of font info for 86 fonts, out of 8000000 for 9000
  17 hyphenation exceptions out of 8191
- 61i,16n,69p,1266b,258s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 61i,16n,69p,1784b,258s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-dist/fonts/type1/public
@@ -369,7 +384,7 @@ lic/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on Report.pdf (2 pages, 135577 bytes).
+Output written on Report.pdf (2 pages, 138598 bytes).
 PDF statistics:
  77 PDF objects out of 1000 (max. 8388607)
  46 compressed objects within 1 object stream

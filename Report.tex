@@ -68,16 +68,24 @@ In its original form, the DFT is quite computationally expensive and complex, co
 \end{equation}
 This particular implementation is known as the Cooley-Tukey FFT, and is one of the most widely used algorithms in the world. 
 \subsection{Analyzing Music}
-\subsubsection{Musical Structure}
-\subsubsection{FFT Output}
+In order to analyze and classify music, it is important to understand how it is structured. Fundamentally, music is simply composed of air molecules vibrating at different frequencies and amplitudes. This means that there are a theoretically infinite number of ways to structure and divide these different frequencies, but in western music, the most common method uses what are known as major scales. The major scales are composed of 7 unique notes, A through G order based on their pitch interval. While advanced music theory is outside of the scope for this paper, it is important to recognize that a single major scale is composed of 7 notes, with a predetermined order of pitch difference. These pitch differences are somewhat unintuitive however, since music is arranged on a logarithmic scale, meaning that the note typically known as A0 (The note A in the first recognized octave) is defined as 27.5 Hz, A1 is 55 Hz, A2 is 110 Hz, and so on. This is significant, because it means that the most commonly used frequencies in music will typically be grouped towards the lower half of the established musical range. In general, musical notes are defined from C0 at 16.35 Hz all the way to B8 at 7902.13 Hz. Most types of music will use notes toward the center of this range, as the extremes are considered somewhat unpleasant; however, different genres of music may use varying distributions of these frequencies. For instance, an EDM or electronic artist may choose to use frequencies in the 0 or 1 octave in order to produce a more physical feeling. These frequencies are considered ``super-low'', since they are so low that, when combined with other tones, they are more often \textit{felt} than heard.
 \section{Experimental Procedure}
-\subsection{Taking the FFT of an MP3 File}
-\subsection{Shrinking our Sample Size - COrrect terminology?}
-\subsection{Data Storage and Access}
+Using this information, it becomes relatively simple to start processing audio files and comparing them to each other. There are 3 key steps to this process; audio information should be read from a file, then that audio information should be compressed and generalized in order to compare two songs. This generalized audio information should be collated into some structure that will allow simple access later. The simplest application for this concept is to compare a collection of songs to a single different audio file and return a list of songs from the collection that are most similar to that audio file.
+\subsection{Processing a Single Audio File}
+Digital audio files are simply a collection of amplitude information arranged based on time. This information is sampled from the original continuous audio source, typically at a rate of 44,100 Hz (Meaning that there should be 44,100 samples making up a single seconds worth of audio information). This format is incredibly useful for a computer which must play recorded audio, since the data will simply tell a computer the \textit{amplitude} at which to vibrate a speaker diaphragm, and the time at which to do so. It is less applicable to examining and classifying the underlying composition of the audio however, and must be tranformed using the FFT to a more applicable format. Taking the FFT shifts the sampled data from amplitude in terms of time to amplitude in terms of frequency, as discussed earlier.
+\subsection{Interpreting Data}
+The FFT output is formatted in a much more accessible fashion than the time domain data. It provides an array of complex bin values that represent a range of frequencies as discussed earlier. In order to use this information to compare two song files, it is important to generalize the information somewhat. Comparing the raw FFT of two files can hold some value, but they contain such a high volume of information that such a comparison could result in too high a degree of specificity. One method for generalizing this data is to separate the frequency spectrum into so-called 'bands'. These bands can be chosen based on a variety of different factors, but it seems most logical to divide them based on musical structure. Based on the scale structure discussed earlier in this paper, a reasonable set of frequency breakpoints could be $0-60\text{ Hz}$ to represent 'superlow' frequencies, $61-240\text{ Hz}$ for lows, $241-500\text{ Hz}$ for mids, $501-2000\text{ Hz}$ for highs, and $2001-8000\text{ Hz}$ to represent 'superhighs'. Since the FFT bin indeces do not correspond to actual frequencies, it is necessary to convert these frequencies in order to determine the closest bins that these frequencies correspond to. Calculating the bin into which a specific frequency will fall relies upon the relationship between sampling frequency and sequence length. If $N$ represents the number of samples in an FFT signal, $f$ represents the frequency value, and $r$ represents sampling rate then bin number can be found from the following equation:
+\begin{equation}\label{BinNum}
+  \text{Bin Index}=\frac{f * N}{r}
+\end{equation}
+Using this equation, it becomes a trivial operation to determine the necessary breakpoint indeces, then to segment the FFT data into a set of bands. 
+
+
 \section{Results}
 
-\section{Fake Bibliography}
-Move all these sources to a .bib file later and import using BibTex
+\section{Bibliography}
+We will move all these sources to a .bib file later and import using BibTex.
+Until we figure out how to do that, they are referenced here by section.
 \subsection{Similar Work}
 https://www.music-tomorrow.com/blog/how-spotify-recommendation-system-works-a-complete-guide-2022
 https://www.toptal.com/algorithms/shazam-it-music-processing-fingerprinting-and-recognition
@@ -87,6 +95,13 @@ https://dsp.stackexchange.com/questions/26927/what-is-a-frequency-bin
 https://stackoverflow.com/questions/10754549/fft-bin-width-clarification
 \subsection{FFT}
 https://pythonnumericalmethods.studentorg.berkeley.edu/notebooks/chapter24.03-Fast-Fourier-Transform.html
+\subsection{Analysing Music}
+https://muted.io/note-frequencies/
+https://rwu.pressbooks.pub/musictheory/chapter/major-scales/
+https://people.umass.edu/gmhwww/382/pdf/12-music%20scales.pdf
+https://www.onlinepianocoach.com/common-music-scales.html
+https://www.petervis.com/hi-fi-info/jvc-sea-graphic-equalizers/frequency-spectrum-of-common-musical-instruments.html
+
 
 
 \end{document}
