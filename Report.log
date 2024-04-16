@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.3.25)  16 APR 2024 11:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.3.25)  16 APR 2024 19:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -290,62 +290,72 @@ e
 fonts/enc/dvips/base/8r.enc}
 
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 84--86
+] [2]
+Underfull \hbox (badness 10000) in paragraph at lines 95--97
 []\OT1/ptm/m/n/10 https://www.music-tomorrow.com/blog/how-spotify-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 84--86
+Underfull \hbox (badness 10000) in paragraph at lines 95--97
 \OT1/ptm/m/n/10 recommendation-system-works-a-complete-guide-2022
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 84--86
+Underfull \hbox (badness 10000) in paragraph at lines 95--97
 \OT1/ptm/m/n/10 https://www.toptal.com/algorithms/shazam-it-music-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 87--90
+Underfull \hbox (badness 10000) in paragraph at lines 98--101
 []\OT1/ptm/m/n/10 https://dsp.stackexchange.com/questions/5915/what-is-the-
  []
 
 
-Overfull \hbox (42.2367pt too wide) in paragraph at lines 87--90
+Overfull \hbox (42.2367pt too wide) in paragraph at lines 98--101
 \OT1/ptm/m/n/10 meaning-of-the-dft https://dsp.stackexchange.com/questions/2692
 7/what-
  []
 
 
-Overfull \hbox (24.95718pt too wide) in paragraph at lines 87--90
+Overfull \hbox (24.95718pt too wide) in paragraph at lines 98--101
 \OT1/ptm/m/n/10 is-a-frequency-bin https://stackoverflow.com/questions/10754549
 /fft-
  []
 
 
-Overfull \hbox (86.78693pt too wide) in paragraph at lines 91--92
+Overfull \hbox (86.78693pt too wide) in paragraph at lines 102--103
 []\OT1/ptm/m/n/10 https://pythonnumericalmethods.studentorg.berkeley.edu/notebo
 oks/chapter24.03-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--97
+Underfull \hbox (badness 10000) in paragraph at lines 104--109
 []\OT1/ptm/m/n/10 https://muted.io/note-frequencies/
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--97
+Underfull \hbox (badness 10000) in paragraph at lines 104--109
 \OT1/ptm/m/n/10 https://rwu.pressbooks.pub/musictheory/chapter/major-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--97
+Underfull \hbox (badness 10000) in paragraph at lines 104--109
 \OT1/ptm/m/n/10 scales/ https://people.umass.edu/gmhwww/382/pdf/12-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--97
+Underfull \hbox (badness 10000) in paragraph at lines 104--109
 \OT1/ptm/m/n/10 musichttps://www.onlinepianocoach.com/common-music-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--109
+\OT1/ptm/m/n/10 scales.html https://www.petervis.com/hi-fi-info/jvc-sea-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--109
+\OT1/ptm/m/n/10 graphic-equalizers/frequency-spectrum-of-common-musical-
  []
 
 
@@ -359,17 +369,17 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[2] (./Report.aux)
+[3] (./Report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 3488 strings out of 476076
- 58709 string characters out of 5793775
+ 3490 strings out of 476076
+ 58728 string characters out of 5793775
  1946187 words of memory out of 5000000
- 25573 multiletter control sequences out of 15000+600000
+ 25575 multiletter control sequences out of 15000+600000
  587890 words of font info for 86 fonts, out of 8000000 for 9000
  17 hyphenation exceptions out of 8191
  61i,16n,69p,1784b,258s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -384,10 +394,10 @@ lic/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on Report.pdf (2 pages, 138598 bytes).
+Output written on Report.pdf (3 pages, 145320 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
- 46 compressed objects within 1 object stream
+ 80 PDF objects out of 1000 (max. 8388607)
+ 48 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
