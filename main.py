@@ -8,18 +8,6 @@ import os
 import sys
 
 
-# === [ General Variables ] ===
-SongFile="./SongData"
-# Stores song names and characteristics as dictionary
-# Key is audio file basename, value is array of data.
-# Value Contents: [Array of polar coordinates for bin max]
-
-CompFile="./CompData"
-# Array of Arrays. Each Array contains 3 values.
-# Values: (Song1, Song2, Distance)
-# Distance represents the linear distance between two polar coordinates
-
-
 def process_song(SongFile, SongDataObject, ComparisonDataObject):
     print(f"\n[LOG] -- Processing audio file: {SongFile}\n")
 
@@ -45,11 +33,11 @@ def process_song(SongFile, SongDataObject, ComparisonDataObject):
     return Result
 
 def Scan(directory, SongDataObject, ComparisonDataObject):
-    for filename in os.listdir(directory):
-        if os.path.isfile(os.path.join(directory, filename)):
+    for root,dirs,files in os.walk(directory):
+        for filename in files:
             if filename.endswith('.mp3'):
                 # print(filename)
-                full_file=os.path.join(directory, filename)
+                full_file=os.path.join(root, filename)
                 if filename not in SongDataObject.storage.keys():
                     process_song(full_file, SongDataObject, ComparisonDataObject)
                 else:
@@ -107,6 +95,46 @@ def PlaylistFromDataframe(df):
 
 def main():
 
+    # === [ General Variables ] ===
+    SongFile="./SongData"
+    # Stores song names and characteristics as dictionary
+    # Key is audio file basename, value is array of data.
+    # Value Contents: [Array of polar coordinates for bin max]
+
+    CompFile="./CompData"
+    # Array of Arrays. Each Array contains 3 values.
+    # Values: (Song1, Song2, Distance)
+    # Distance represents the linear distance between two polar coordinates
+
+
+    # === Parse Command Line Arguments ===
+    parser=argparse.ArgumentParser(description="Compare the similarity of two songs.")
+    parser.add_argument('-f', '--file', nargs=1, metavar='filename', help="Files to compare")
+    parser.add_argument('-S', '--Scan', metavar='directory', help='Directory to scan for songs')
+    parser.add_argument('-p', '--play', action='store_true', help='Play a playlist')
+    parser.add_argument('-c', '--config', nargs='+', metavar='variable=value', help='Change variable values. S for SongData path, C for CompData path.')
+    args=parser.parse_args()
+    
+    if args.config:
+        for option in args.config:
+            try:
+                variable, value=option.split('=')
+                if variable == 'S':
+                    SongFile=value
+                    print(SongFile)
+                else:
+                    SongFile=SongFile
+                if variable == 'C':
+                    CompFile=value
+                    print(CompFile)
+                else:
+                    CompFile=CompFile
+                if variable != 'S' and variable != 'C':
+                    print(f"[ERROR] -- Invalid Variable: {variable}\n- Valid variable names are 'S' and 'C'")
+            except ValueError:
+                print(f"[ERROR] -- Invalid format: {option}. Use 'variable=value' format.")
+
+    
     # === Load persistant storage ===
     SongDataStorage=SongData(SongFile)
     if os.path.exists(SongFile):
@@ -114,14 +142,6 @@ def main():
     ComparisonDataStorage=ComparisonData(CompFile)
     if os.path.exists(CompFile):
         ComparisonDataStorage.load()
-
-    # === Parse Command Line Arguments ===
-    parser=argparse.ArgumentParser(description="Compare the similarity of two songs.")
-    parser.add_argument('-f', '--file', nargs=1, metavar='filename', help="Files to compare")
-    parser.add_argument('-S', '--Scan', metavar='directory', help='Directory to scan for songs')
-    parser.add_argument('-p', '--play', action='store_true', help='Play a playlist')
-    args=parser.parse_args()
-
 
         
     # === Scan directory with -S option ===
