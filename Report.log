@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.3.25)  16 APR 2024 19:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.3.25)  17 APR 2024 22:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -113,12 +113,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
 \IEEEPARstartletwidth=\dimen163
 \c@IEEEbiography=\count268
 \@IEEEtranrubishbin=\box52
-) (/usr/share/texmf-dist/tex/latex/cite/cite.sty
-LaTeX Info: Redefining \cite on input line 302.
-LaTeX Info: Redefining \nocite on input line 332.
-Package: cite 2015/02/27  v 5.5
-)
-(/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+) (/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
 
 (/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
@@ -210,6 +205,15 @@ LaTeX Info: Redefining \Relbar on input line 971.
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
 )
+(/usr/share/texmf-dist/tex/latex/cite/cite.sty
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+)
+(/usr/share/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
 (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count281
@@ -217,20 +221,20 @@ File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 ) (./Report.aux)
 \openout1 = `Report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
 -- Lines per column: 56 (exact).
 (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -247,41 +251,8 @@ LaTeX Font Info:    ... okay on input line 25.
 \everyMPtoPDFconversion=\toks25
 ) (/usr/share/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
-
-(/usr/share/texmf-dist/tex/generic/infwarerr/infwarerr.sty
-Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
-)
-(/usr/share/texmf-dist/tex/latex/grfext/grfext.sty
-Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
-
-(/usr/share/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
-Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
-))
-(/usr/share/texmf-dist/tex/latex/kvoptions/kvoptions.sty
-Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
-
-(/usr/share/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
-Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
-)
-(/usr/share/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
-Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
-))
-(/usr/share/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
-Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-(/usr/share/texmf-dist/tex/generic/iftex/iftex.sty
-Package: iftex 2022/02/03 v1.0f TeX engine tests
-)
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-)
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.jpeg,.png,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 504.
 
 (/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
@@ -290,72 +261,58 @@ e
 fonts/enc/dvips/base/8r.enc}
 
 
-] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 95--97
-[]\OT1/ptm/m/n/10 https://www.music-tomorrow.com/blog/how-spotify-
+] [2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 210--213
+[]\OT1/ptm/m/n/8 Dmitry Pas-tukhov, ``How the Spo-tify Rec-om-men-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 95--97
-\OT1/ptm/m/n/10 recommendation-system-works-a-complete-guide-2022
+Underfull \hbox (badness 10000) in paragraph at lines 210--213
+\OT1/ptm/m/n/8 da-tion Sys-tem Works: A Com-plete Guide,'' Avail-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 95--97
-\OT1/ptm/m/n/10 https://www.toptal.com/algorithms/shazam-it-music-
+Underfull \hbox (badness 10000) in paragraph at lines 210--213
+\OT1/ptm/m/n/8 able on-line: $https : / / www . music-[]tomorrow . com / blog /
+
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 98--101
-[]\OT1/ptm/m/n/10 https://dsp.stackexchange.com/questions/5915/what-is-the-
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \hbox (badness 2469) in paragraph at lines 214--215
+[]\OT1/ptm/m/n/8 Jovan Jo-vanovic, ``Shazam It!: Mu-sic Pro-cess-ing, Fin-ger-p
+rint-ing,
  []
 
 
-Overfull \hbox (42.2367pt too wide) in paragraph at lines 98--101
-\OT1/ptm/m/n/10 meaning-of-the-dft https://dsp.stackexchange.com/questions/2692
-7/what-
+Underfull \hbox (badness 10000) in paragraph at lines 222--223
+[]\OT1/ptm/m/n/8 ``Fast Fourier Trans-form in Python,'' Avail-able on-line:
  []
 
 
-Overfull \hbox (24.95718pt too wide) in paragraph at lines 98--101
-\OT1/ptm/m/n/10 is-a-frequency-bin https://stackoverflow.com/questions/10754549
-/fft-
+Underfull \hbox (badness 10000) in paragraph at lines 222--223
+\OT1/ptm/m/n/8 https : / / pythonnumericalmethods . studentorg . berkeley . edu
+ / notebooks /
  []
 
 
-Overfull \hbox (86.78693pt too wide) in paragraph at lines 102--103
-[]\OT1/ptm/m/n/10 https://pythonnumericalmethods.studentorg.berkeley.edu/notebo
-oks/chapter24.03-
+Underfull \hbox (badness 10000) in paragraph at lines 226--227
+[]\OT1/ptm/m/n/8 ``Major Scales,'' Avail-able on-line: $https : / / rwu . press
+books . pub /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 104--109
-[]\OT1/ptm/m/n/10 https://muted.io/note-frequencies/
+Underfull \hbox (badness 10000) in paragraph at lines 228--229
+[]\OT1/ptm/m/n/8 ``Common Mu-sic Scales,'' Avail-able on-line: $https : / / www
+ .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 104--109
-\OT1/ptm/m/n/10 https://rwu.pressbooks.pub/musictheory/chapter/major-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 104--109
-\OT1/ptm/m/n/10 scales/ https://people.umass.edu/gmhwww/382/pdf/12-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 104--109
-\OT1/ptm/m/n/10 musichttps://www.onlinepianocoach.com/common-music-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 104--109
-\OT1/ptm/m/n/10 scales.html https://www.petervis.com/hi-fi-info/jvc-sea-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 104--109
-\OT1/ptm/m/n/10 graphic-equalizers/frequency-spectrum-of-common-musical-
+Underfull \hbox (badness 3803) in paragraph at lines 230--231
+\OT1/ptm/m/n/8 on-line: $https : / / www . petervis . com / hi-[]^^L-[]info / j
+vc-[]sea-[]graphic-[]equalizers /
  []
 
 
@@ -369,20 +326,20 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[3] (./Report.aux)
+[4] (./Report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 3490 strings out of 476076
- 58728 string characters out of 5793775
- 1946187 words of memory out of 5000000
- 25575 multiletter control sequences out of 15000+600000
- 587890 words of font info for 86 fonts, out of 8000000 for 9000
+ 3038 strings out of 476076
+ 49821 string characters out of 5793775
+ 1964187 words of memory out of 5000000
+ 25142 multiletter control sequences out of 15000+600000
+ 592994 words of font info for 97 fonts, out of 8000000 for 9000
  17 hyphenation exceptions out of 8191
- 61i,16n,69p,1784b,258s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,16n,65p,1783b,290s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-dist/fonts/type1/public
@@ -394,10 +351,10 @@ lic/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on Report.pdf (3 pages, 145320 bytes).
+Output written on Report.pdf (4 pages, 155348 bytes).
 PDF statistics:
- 80 PDF objects out of 1000 (max. 8388607)
- 48 compressed objects within 1 object stream
+ 83 PDF objects out of 1000 (max. 8388607)
+ 50 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -82,14 +82,15 @@ def SortRecommendations(Name, ComparisonDataObject):
 
     new_df=pd.DataFrame(concat, columns=['Song', 'Distance'])
     new_df=new_df.sort_values(by='Distance', ascending=True)
+    # new_df=new_df.head(20)
     
     print(new_df)
     return new_df
 
-def PlaylistFromDataframe(df):
+def PlaylistFromDataframe(df, song_root='assets'):
     playlist=[]
     for file in df['Song']:
-        path=os.path.join('assets', file)
+        path=os.path.join(song_root, file)
         playlist.append(path)
     return playlist
 
@@ -112,7 +113,7 @@ def main():
     parser.add_argument('-f', '--file', nargs=1, metavar='filename', help="Files to compare")
     parser.add_argument('-S', '--Scan', metavar='directory', help='Directory to scan for songs')
     parser.add_argument('-p', '--play', action='store_true', help='Play a playlist')
-    parser.add_argument('-c', '--config', nargs='+', metavar='variable=value', help='Change variable values. S for SongData path, C for CompData path.')
+    parser.add_argument('-c', '--config', nargs='+', metavar='variable=value', help='Change variable values. S for SongData path, C for CompData path, D for SongFile directory.')
     args=parser.parse_args()
     
     if args.config:
@@ -129,8 +130,13 @@ def main():
                     print(CompFile)
                 else:
                     CompFile=CompFile
-                if variable != 'S' and variable != 'C':
-                    print(f"[ERROR] -- Invalid Variable: {variable}\n- Valid variable names are 'S' and 'C'")
+                if variable == 'D':
+                    SongDir=value
+                    print(SongDir)
+                else:
+                    SongDir=None
+                if variable != 'S' and variable != 'C' and variable != 'D':
+                    print(f"[ERROR] -- Invalid Variable: {variable}\n- Valid variable names are 'S', 'C', and 'D'.")
             except ValueError:
                 print(f"[ERROR] -- Invalid format: {option}. Use 'variable=value' format.")
 
@@ -169,7 +175,10 @@ def main():
     # === Choose to create or load a playlist. Play that playlist. ===
     if args.play:
         player=PlayerBackend()
-        playlist=PlaylistFromDataframe(df)
+        if SongDir:
+            playlist=PlaylistFromDataframe(df, SongDir)
+        else:
+            playlist=PlaylistFromDataframe(df)
         player.load_playlist(playlist)
         player.play_playlist()
         player.persist_playlist()
