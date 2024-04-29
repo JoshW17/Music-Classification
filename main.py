@@ -1,6 +1,7 @@
 from Data import ComparisonData, SongData
 from Song import Song
 from PlayerBackend import PlayerBackend
+import numpy
 import pandas as pd
 import argparse
 import math
@@ -43,7 +44,7 @@ def Scan(directory, SongDataObject, ComparisonDataObject):
                 else:
                     print(f"[STATUS] -- Song: {filename} already processed, skipping.")
 
-def Compare(Name1, PolarArray1, Name2, PolarArray2, ComparisonDataObject):
+def XXCompare(Name1, PolarArray1, Name2, PolarArray2, ComparisonDataObject):
 
     # === Compare Frequency Composition ===
     distance=[]
@@ -61,6 +62,14 @@ def Compare(Name1, PolarArray1, Name2, PolarArray2, ComparisonDataObject):
     Result=ComparisonDataObject.add_freqdata(Name1, Name2, distance)
     ComparisonDataObject.write()
 
+def Compare(Name1, ComplexArray1, Name2, ComplexArray2, ComparisonDataObject):
+    Inner=numpy.array(ComplexArray1)-numpy.array(ComplexArray2)
+    distance=numpy.linalg.norm(Inner)
+    Result=ComparisonDataObject.add_freqdata(Name1, Name2, distance)
+    ComparisonDataObject.write()
+    
+
+    
 def SortRecommendations(Name, ComparisonDataObject):
 
     # === Data to Compare ===

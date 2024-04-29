@@ -1,26 +1,20 @@
 % Header
 
 \documentclass[conference]{IEEEtran}
-
-\ifCLASSINFOpdf
-  \usepackage[pdftex]{graphicx}
-  \graphicspath{{./report/}}
-  \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  \usepackage[dvips]{graphicx}
-  \graphicspath{{./report/}}
-  \DeclareGraphicsExtensions{.jpg}
-\fi
-
 \hyphenation{op-tical net-works semi-conduc-tor}
-\graphicspath{ {./report/} }
-
 \usepackage{amsmath}
+\usepackage{booktabs}
 \usepackage{cite}
 \usepackage{url}
+\usepackage{amsfonts}
+\usepackage{tabularx}
+\usepackage{algorithm}
+\usepackage[indLines=false,italicComments=true]{algpseudocodex}
+\usepackage{graphicx}
+\graphicspath{{assets/images/}}
 
 \begin{document}
-\title{Music Classification - Pick a beteer title later}
+\title{Music Classification with Signal Processing Techniques}
 \author{\IEEEauthorblockN{Christian Johnson}
   \IEEEauthorblockA{Electrical Engineering Department\\
     United States Coast Guard Academy\\
@@ -41,195 +35,208 @@
 
 \maketitle
 \begin{abstract}
-  This is an abstract
+This paper explores the application of digital signal processing techniques in classifying and comparing music files. A method for quantifying similarity between two audio signals is developed utilizing the Fourier Transform to analyze frequency composition. This method is applied in order to generate music recommendations based on a single song. The study investigates the effectiveness of this approach through experimental procedures involving a diverse collection of music files. Results demonstrate promising outcomes, with the produced playlists organized in logical orders based on the similarity of songs. The paper concludes by discussing the implications fo the research, and suggesting avenues for future exploration in personalized music recommendation systems.
 \end{abstract}
 
-\section{Introduction}
-With the advent of music subscription services, many people have become accustomed to automatically generated playlists, tailor-made to their own personal taste. These services provide such playlists at the push of a button, analyzing the user's listening history to continuously recommend similar songs. Providers such as Pandora, Spotify, and LastFM maintain massive databases containing context information on millions of songs in order to present the best recommendations. For those who prefer to maintain their own local music library however, the options for tailored music recommendations are dramatically reduced. This paper seeks to explore the application of digital signal processing techniques in order to implement similar music recommendation functionality that will work with local music files.
-\section{Theory}
-\subsection{Background}
-The majority of music analysis is based on a family of functions known as Fourier Transforms. A Fourier Transform is used to transform time-domain audio information into a frequency-domain representation. In the time domain, sound is represented as amplitude in terms of time. In the frequency domain, sound is instead represented as a function of magnitude based on frequency. What is important to recognize, is that in both cases the signal is still continuous, meaning unbroken, with theoretically infinite data between two points. A continuous signal contains a great deal of information that makes it difficult to perform operations on. In order for a computer to be able to process such a signal, that amount of information must be reduced through an operation known as \textit{sampling}. Sampling replaces the continuous signal with a discrete representation; an array of values at (typically) evenly spaced indeces of time. The normal Fourier Transform cannot operate on discrete signals however, which is where a specific type of Fourier Transform known as the Discrete Fourier Transform (DFT) comes into play. The DFT is comprised of a single summation operation, which will produce an array of complex number representations.
-\begin{equation}
-  X(k)=\frac{1}{N}\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}{N}kn}\label{DFT}
+\section{Introduction}\label{sec:Introduction}
+With the advent of music subscription services, many people have become accustomed to automatically generated playlists, tailor-made to their own personal taste. These services provide such playlists at the push of a button, analyzing the user's listening history to continuously recommend similar songs. Providers such as Pandora, Spotify, and LastFM maintain massive databases containing contextual information on millions of songs in order to present recommendations that match each listener's unique taste. For those who prefer to maintain their own local music library however, the options for tailored music recommendations are dramatically reduced. This paper seeks to explore the application of digital signal processing techniques in order to implement similar music recommendation functionality that will work with local music files.
+\section{Theory}\label{sec:Theory}
+\subsection{Background}\label{sec:Background}
+Music analysis is based on a commonly used function known as the Fourier Transform. A Fourier Transform is used to transform time-domain audio information into a frequency-domain representation. Sound in the time domain is represented as a waveform, where amplitude is a function of time. This amplitude represents vibrations in the air, which the human ear interprets as sound. The frequency domain, however, represents sound as magnitude based on frequency, which is more relevant than time information when analyzing music. For a computer to process this frequency signal, the amount of information present in the signal must be reduced through a process called \textit{sampling}. Sampling replaces the continuous signal with a discrete representation; an array of values at (typically) evenly spaced indeces of time. Stated here without derivation, the Discrete Fourier Transform, or DFT, is most commonly used to transform analog signals into digital frequency representations. See \cite{proakisDigitalSignalProcessing2007} for more detailed information.
+\begin{equation}\label{eq:DFT}
+  S(k)=\frac{1}{N}\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}{N}kn}
 \end{equation}
-Each value in the DFT output $S[k]$ is a complex number that represents a point in an $N$ dimensional vector space. The magnitude and phase of that point represent the content of the time-domain signal at frequency $\frac{2k\pi}{N}$, where $N$ is the length of $S[k]$. These values depend a great deal on a concept known as \textit{sampling frequency}, which refers to the time taken between each sample of the original time-domain signal. Each 'bin' of $S[k]$ represents a collection of frequencies, $\frac{-F_{s}}{2N} + \frac{k*F_{s}}{N} < f < \frac{F_{s}}{2N} + \frac{k*F_{s}}{N}$. As such, it is important to recognize that $S[1]$ does not directly correspond to a specific frequency value; in order to find the DFT output for, e.g. 20Hz, one must determine which bin this frequency will fall into.
-\subsubsection{The FFT}
-In its original form, the DFT is quite computationally expensive and complex, comprised of $\mathcal{O}(n^{2})$ operations. An algorithm known as the Fast Fourier Transform (FFT) dramatically simplifies this complexity, reducing the expense to $\mathcal{O}(n*log(n))$ operations. It does this by exploiting symmetry within the DFT. Equation \eqref{DFT}, the basic representation for the DFT, is periodic about $N$, i.e. $X_{k+l*N}=X_{k}$ for any integer $l$. The FFT uses this relationship to break the DFT into even and odd components.
-\begin{equation}\label{FFT}
+\begin{equation}\label{eq:DFTMap}
+  S: \mathbb{R}^{N}\rightarrow\mathbb{C}^N
+\end{equation}
+Equation \eqref{eq:DFTMap} shows the DFT as a functional map from real to complex values. Each point within the DFT output represents a point in an N-dimensional complex vector space, where the magnitude and phase of that point represent the content of time-domain signal at frequency $\frac{2k\pi}{N}$. These values depend on a concept known as \textit{sampling frequency}, which refers to the space between each sample of a signal.
+\begin{figure}[!htb]
+  \includegraphics[scale=0.2]{DFTBin}
+  \caption{Example Frequency Distribution Between Bins}\label{fig:FrequencyBins}
+\end{figure}
+
+Each 'bin' of $S[k]$ represents a collection of frequencies, $\frac{-F_{s}}{2N} + \frac{kF_{s}}{N} < f < \frac{F_{s}}{2N} + \frac{kF_{s}}{N}$. This relationship is shown in Fig.\eqref{fig:FrequencyBins}, which illustrates that $S[1]$ does not directly correspond to a specific frequency value; in order to find the DFT output for, e.g. 20Hz, one must determine which bin this frequency will fall into.
+\subsubsection{The FFT}\label{sec:TheFFT}
+In its original form, the DFT is computationally expensive and complex, comprised of $\mathcal{O}(N^{2})$ operations. An algorithm known as the Fast Fourier Transform (FFT) dramatically simplifies this complexity, reducing the expense to $\mathcal{O}(N*log(N))$ operations. It does this by exploiting symmetry within the DFT. Equation \eqref{eq:DFT}, the basic representation for the DFT, is periodic about $N$, i.e. $X_{k+lN}=X_{k}$ for any integer $l$. The FFT uses this relationship to break the DFT into even and odd components.
+\begin{equation}\label{eq:FFT}
   \begin{split}
  X_{k} & =\sum_{n=0}^{N-1}{x(n)e^{-j2\pi kn/N}}\\
   & =\sum_{m=0}^{N/2-1}{x(2m)*e^{-j2\pi km/(N/2)}}\\ & + \sum_{m=0}^{N/2-1}{x(2m+1)*e^{-j2\pi km/(N/2)}}
   \end{split}
 \end{equation}
 This particular implementation is known as the Cooley-Tukey FFT, and is one of the most widely used algorithms in the world. 
-\subsection{Analyzing Music}
-In order to analyze and classify music, it is important to understand how it is structured. Fundamentally, music is simply composed of air molecules vibrating at different frequencies and amplitudes. This means that there are a theoretically infinite number of ways to structure and divide these different frequencies. In western music, the most common method uses what are known as major scales. The major scales are composed of 7 unique notes, A through G ordered based on their pitch interval. While advanced music theory is outside the scope for this paper, it is important to recognize that a single major scale is composed of 7 notes, with a predetermined order of pitch difference. These pitch differences are somewhat unintuitive however, since music is arranged on a logarithmic scale This means that the note typically known as A0 (The note A in the first recognized octave) is defined as 27.5 Hz, A1 is 55 Hz, A2 is 110 Hz, and so on. This is significant, because it means that the most commonly used frequencies in music will typically be grouped towards the lower half of the established musical range. In general, musical notes are defined from C0 at 16.35 Hz all the way to B8 at 7902.13 Hz. Most types of music will use notes toward the center of this range, as the extremes are considered somewhat unpleasant; however, different genres of music may use varying distributions of these frequencies. For instance, an EDM, or electronic, artist may choose to use frequencies in the 0 or 1 octave in order to produce a more physical feeling. These frequencies are considered ``super-low'', since they are so low that, when combined with other tones, they are more often \textit{felt} than heard.
-\section{Experimental Procedure}
-Using this information, it becomes relatively simple to start processing audio files and comparing them to each other. There are several key steps to this process; audio information should be read from a file, then that audio information should be compressed and generalized in order to compare two songs. This generalized audio information should be collated into some structure that will allow simple access later. The simplest application for this concept is to compare a collection of songs to a single different audio file and return a list of songs from the collection that are most similar to the original audio file.
-\subsection{Processing a Single Audio File}
-Digital audio files are simply a collection of amplitude information arranged based on time. This information is sampled from the original continuous audio source, typically at a rate of 44,100 Hz (Meaning that there should be 44,100 samples making up a single seconds worth of audio information). This format is incredibly useful for a computer which must play recorded audio, since the data will simply tell a computer the \textit{amplitude} at which to vibrate a speaker diaphragm, and the time at which to do so. It is less applicable to examining and classifying the underlying composition of the audio however, and must be tranformed using the FFT to a more applicable format. Taking the FFT shifts the sampled data from amplitude in terms of time to amplitude in terms of frequency, as discussed earlier.
-\subsection{Interpreting Data}
-The FFT output is formatted in a much more accessible fashion than the time domain data, providing an array of complex bin values that represent a range of frequencies as discussed earlier. In order to use this information to compare two song files, it is important to generalize the information somewhat. Comparing the raw FFT of two files can hold some value, but they contain such a high volume of information that such a comparison could result in too high a degree of specificity. One method for generalizing this data is to separate the frequency spectrum into so-called 'bands'. These bands can be chosen based on a variety of different factors, but it seems most logical to divide them based on musical structure. Referencing the scale structure discussed earlier in this paper, a reasonable set of frequency breakpoints could be $0-60\text{ Hz}$ to represent 'superlow' frequencies, $61-240\text{ Hz}$ for lows, $241-500\text{ Hz}$ for mids, $501-2000\text{ Hz}$ for highs, and $2001-8000\text{ Hz}$ to represent 'superhighs'. Since the FFT bin indeces do not correspond to actual frequencies, it is necessary to convert these frequencies in order to determine the closest bins that they correspond to. Calculating the bin into which a specific frequency will fall relies upon the relationship between sampling frequency and sequence length. If $N$ represents the number of samples in an FFT signal, $f$ represents the frequency value, and $r$ represents sampling rate then bin number can be found from the following equation:
-\begin{equation}\label{BinNum}
+\subsection{Analyzing Music}\label{sec:AnalyzingMusic}
+In order to analyze and classify music, it is important to understand how it is structured. Fundamentally, music is composed of pressure waves vibrating at different frequencies and amplitudes. In western music, the most common method for organizing these frequencies uses what are known as scales, which group frequencies and assign them alpha-numeric designations based on 'relative tone'. Relative tone refers to how the human ear interprets a note. For example, the notes A1, A2, and A3 are denoted as 55, 110, and 220 Hz respectively. These notes all 'sound' like the same note, in different octaves, and scales are groupings of these repeated notes. More information on this topic is presented in \cite{gothamOPENMUSICTHEORY2021}.
+\begin{figure}[!htb]
+  \includegraphics[scale=0.2]{MusicScales}
+  \caption{Concert B Flat scale, C4 to C6}\label{fig:MusicScales}
+\end{figure}
+Fig.\eqref{fig:MusicScales} shows 2 octaves of the C Major scale. Examining the frequencies of this scale, and their distribution, it is apparent that the notes are not distributed evenly - music is instead arranged on a logarithmic scale. This conceptual understanding is what leads to a method for comparing different songs. Recognizing these scales as segments into which to divide the audible frequency spectrum, presents a possible metric through which to 'classify' or represent a song. The prevalence (or relative magnitude) of these different scales and the notes that make them up, represents information about a song's frequency makeup that can serve as a point of comparison. This assumption, that an audio signal's frequency makeup can be used to assess similarity to other signals, is the singular premise upon which this paper is based. Music recommendation is based upon the concept of 'similarity', and this paper asserts that frequency composition in terms of scale structure in music is an effective method with which to compare different songs. Based on this assertion, it becomes important to determine which frequencies, that is, which \textit{scales} are most important when analyzing music. Table~\eqref{tab:music_notes} shows 8 octaves of notes and their frequency values, and what becomes clear is that at higher frequencies, individual notes are spaced further apart than they are at lower frequencies. Based on this information, it is reasonable to assume that notes toward the lower end of the audible frequency spectrum will be more prevalent, and therefore more important to distinguish between for any system that seeks to characterize musical frequency. Therefore, defining frequency ranges that will characterize most musical pieces will feature much wider ranges at the high end of the spectrum, as individual notes are spaced further apart. Using frequency values that are similar to those shown in \eqref{tab:music_notes}, a reasonable characterization range can be defined from 0-60Hz, 61-240Hz, 241-500Hz, 501-2000Hz, and 2001-8000Hz. There are few instruments that produce frequencies over 8000Hz, which makes this a reasonable cutoff in order to reduce the data that must be processed. These frequency ranges represent common groupings of frequencies that share musical and instrumental characteristics, which can be used to characterize a song. 
+\begin{table*}[h]
+  \centering
+  \begin{tabular}{|c|*{9}{c|}}
+    \hline
+    Note & Octave 0 & Octave 1 & Octave 2 & Octave 3 & Octave 4 & Octave 5 & Octave 6 & Octave 7 & Octave 8 \\
+    \hline
+    C & 16.35 Hz & 32.70 Hz & 65.41 Hz & 130.81 Hz & 261.63 Hz & 523.25 Hz & 1046.50 Hz & 2093.00 Hz & 4186.01 Hz \\
+    D & 18.35 Hz & 36.71 Hz & 73.42 Hz & 146.83 Hz & 293.66 Hz & 587.33 Hz & 1174.66 Hz & 2349.32 Hz & 4698.63 Hz \\
+    E & 20.60 Hz & 41.20 Hz & 82.41 Hz & 164.81 Hz & 329.63 Hz & 659.25 Hz & 1318.51 Hz & 2637.02 Hz & 5274.04 Hz \\
+    F & 21.83 Hz & 43.65 Hz & 87.31 Hz & 174.61 Hz & 349.23 Hz & 698.46 Hz & 1396.91 Hz & 2793.83 Hz & 5587.65 Hz \\
+    G & 24.50 Hz & 49.00 Hz & 98.00 Hz & 196.00 Hz & 392.00 Hz & 783.99 Hz & 1567.98 Hz & 3135.96 Hz & 6271.93 Hz \\
+    A & 27.50 Hz & 55.00 Hz & 110.00 Hz & 220.00 Hz & 440.00 Hz & 880.00 Hz & 1760.00 Hz & 3520.00 Hz & 7040.00 Hz \\
+    B & 30.87 Hz & 61.74 Hz & 123.47 Hz & 246.94 Hz & 493.88 Hz & 987.77 Hz & 1975.53 Hz & 3951.07 Hz & 7902.13 Hz \\
+    \hline
+  \end{tabular}
+  \caption{Frequencies of Musical Notes}
+  \label{tab:music_notes}
+\end{table*}
+
+\section{Procedure}\label{sec:Procedure}
+
+\subsection{Processing a Single Audio File}\label{sec:processing}
+Digital audio files are a collection of amplitude information arranged based on time. This information is sampled from the original continuous audio source, typically at a rate of 44,100 Hz (Meaning that there are 44,100 samples making up a single seconds worth of audio information). This format is incredibly useful for a computer which must play recorded audio, since the data will simply tell a computer the \textit{amplitude} at which to vibrate a speaker diaphragm, and the time at which to do so. It is less applicable to examining and classifying the underlying composition of the audio however, and must be tranformed using the FFT to a more applicable format. Taking the FFT maps the sampled data from amplitude in terms of time to amplitude in terms of frequency, as discussed in section \eqref{sec:Background}.
+
+\begin{algorithm}
+  \caption{Characterizing a Music File}\label{alg:characterize}
+  \begin{algorithmic}
+    \Function{Segment}{File}\Comment{File should be an .MP3 file}
+    \State $x\gets$ .MP3 file audio data
+    \State $X\gets FFT(x)$
+    \State $a=[\text{Array of Frequency Breakpoints}]$
+    \State $A=\text{Index Breakpoints from }a$\Comment{Uses \eqref{eq:BinNum}}
+    \State $B\gets$ FFT Data segmented based on $A$
+    \For {Segment in B}
+    \State max$\gets$FFT bin with the highest magnitude
+    \EndFor
+    \State list$\gets$all max values \Comment{A list of complex numbers}
+    \State \Return{list}
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Interpreting Data}\label{sec:interpreting}
+In order to use the frequency information generated by the FFT to compare two songs, it is important to generalize the information. Algorithm \eqref{alg:characterize} demonstrates a method for transforming the FFT output data into a generalized representation. The algorithm describes the process of taking the FFT of an audio file and \textit{segmenting} it. Segmenting the FFT data consists of seperating the data into frequency bands based on the values discussed in section \eqref{sec:AnalyzingMusic}. Within each band, the FFT bin (or index) with the highest magnitude will represent the most prominent frequency in that range. It is important to recognize that the FFT is normalized, which means that the indeces will not correspond to individual frequencies, as shown in Fig.~\eqref{fig:FrequencyBins}. When segmenting the FFT, the frequency breakpoints must be converted to an index value using \eqref{eq:BinNum}, where $N$ represents the number of samples in an FFT signal, $f$ representes the frequency value, and $r$ represents sampling rate. This formula uses these values to determine the bin into which a specific frequency will fall.
+\begin{equation}\label{eq:BinNum}
   \text{Bin Index}=\frac{f * N}{r}
 \end{equation}
-Using this equation, it becomes a trivial operation to determine the necessary breakpoint indeces, then to segment the FFT data into a set of bands. This segmented FFT groups together several series of frequencies which make up similar ranges. Finding the bin with the largest magnitude within each segment presents a way to identify which frequencies are most prominent within a given audio file. Given the segments defined earlier, this compresses 44,100 samples per second of frequency information to an array of 5 complex numbers of the form $a+bj$, which can each be rewritted as polar coordinates. Polar coordinates, in general, represent a point or vector on a two-dimensional plane. The distance between the endpoints of two vectors can be computed using the Euclidean Distance Algorithm, wherein each polar coordinate is converted to cartesian coordinates of the form $(x,y)$. The Euclidean Distance is simply the length of the line segment connecting the two coordinates, using the following relationship:
-\begin{equation}\label{Euclidean}
-  \text{Distance}=\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}
+This segmented FFT groups together several series of frequencies which make up similar ranges. Finding the bin with the largest magnitude within each segment produces an array of complex numbers, which presents a way to identify which frequencies are most prominent within a given audio file. Using the frequency breakpoints as defined in section \eqref{sec:AnalyzingMusic} will produce a 5-element array, where each element is a complex number representing the most prominent frequency in a segment. The 5-element array stands as a characteristic representation of a single song, which can be used as a point of comparison. In order to determine the similarity between two songs, one must use these characteristic arrays and determine how similar those are. The Euclidean Distance Formula, \eqref{eq:Euclidean}, provides a simple method for determining the physical distance between the endpoints of two vectors.
+\begin{equation}\label{eq:Euclidean}
+  d(\hat{x_1},\hat{x_2})=\sqrt{(x_1-x_2)\overline{(x_1-x_2)}}
 \end{equation}
-Thus, the similarity between two songs can be approximated from each song's array of 5 polar coordinates. The distance between each element is found and concatenated into an array of 5 distance values. The average of these values can be approximated as a single similarity metric to compare two songs.
-\subsection{Storing Comparison Data}
-Above, it is shown how a song can be characterized through its frequency data and compared to a single other song. This comparison takes the form of a distance metric, inversely representing the proximity of the two songs' primary component frequencies. The larger this distance metric, the less similar the two songs are. In order to construct a system which can handle more than two songs, it is necessary to construct a method for storing and accessing data. The storage and access functions, while related, can be constructed seperately. The system can 'take in' new audio files - performing the FFT, segmenting, and gathering an array of polar coordinates for each file. These polar arrays are stored as values in a dictionary structure, with the filename as the key. This dictionary structure allows for an extremely fast lookup time when accessing values by key, and serves as persistant storage for frequency data.
-Upon an entry into the dictionary, the new entry is compared to every other entry in the dictionary, producing a three element array with the first two elements being the names of the two songs being compared, and the third value being the comparison metric; the distance between the two songs. This 3 element array is concatenated into a second datastructure - a list comprised of three element arrays. This list serves as storage for comparison data, comprised of every possible pair of songs that the system has recorded. In order to produce a list of 'similar' songs, the system can take a file as input, checking whether that file is already present in the dictionary of frequency data. If the file is not present, the FFT is computed, the information is added to the dictionary, and comparison data is added to the list. If the data is already present, the FFT is skipped. The system searches for all elements of the list that contain the name of the song being searched for and removes that song to produce a list of two element arrays. These arrays are sorted by distance metric to produce an ordered list of songs. The songs at the top of the list have the smallest distance, and therefore are most similar to the baseline song.
-\section{Results}
-Because of the qualitative nature of music, it is somewhat challenging to evaluate the system's actual performance. In order to actually examine how well the system performs, it is necessary to track the results produced using a relatively diverse collection of music files. Using a dataset of around 21 songs, comprised of several songs each from about 7 artists, the system was consistently able to organize the songs into seemingly logical orders based on similarity. One example output for this system is shown in Table~\ref{CompTab}, producing songs that are similar to 'Bridge Over Troubled Water', by Simon and Garfunkel.
-\begin{table}[htbp]
-  \caption{Comparison Output - A Bridge Over Troubled Water}
-  \label{CompTab}
-  \begin{center}
-    \begin{tabular}{|c|c|}
-      \hline
-      \textbf{Song Name} & \textbf{Distance} \\
-      \hline
-      MrsRobinson.mp3 &  2991.601247 \\
-      TheViewBetweenVillages.mp3 &  3056.214826 \\
-      StickSeason.mp3 &  3556.499786 \\
-      ElCondorPasa.mp3 &  3823.472017 \\
-      AHazyShadeOfWinter.mp3 &  4217.250688 \\
-      HomewardBound.mp3 &  4245.070162 \\ 
-      HeadingSouth.mp3 &  4341.300415 \\
-      ScarboroughFair.mp3 &  4867.695298 \\
-      TheBoxer.mp3 &  5639.500292 \\
-      TheDanglingConversation.mp3 &  6817.155551 \\
-      MrForgettable.mp3 &  8602.562881 \\
-      Someday.mp3 &  9474.584567 \\
-      MiserableMan.mp3 &  9654.682392 \\
-      It'sNotMyTime.mp3 & 10554.550396 \\
-      Burn.mp3 & 10640.759481 \\
-      SomethingInTheOrange.mp3 & 11096.156537 \\
-      DuHast.mp3 & 11332.417538 \\
-      LastOfTheAmericanGirls.mp3 & 12020.358250 \\
-      FromAustin.mp3 & 12213.250311 \\
-      VivaLaVida.mp3 & 12465.632844 \\
-      NorthernAttitude.mp3 & 12583.604234 \\
-      IWillWait.mp3 & 13405.201120 \\
-      OrangeJuice.mp3 & 13510.787237 \\
-      BurnBurnBurn.mp3 & 14431.161942 \\
-      IntoTheNothing.mp3 & 15818.285350 \\
-      21Guns.mp3 & 16665.654127 \\
-      Kryptonite.mp3 & 19614.481553 \\
-      21stCenturyBreakdown.mp3 & 20456.969334 \\
-      LetMeBeMyself.mp3 & 20523.500544 \\
-      AwakeMySoul.mp3 & 20909.033851 \\
-      HolidayBoulevardOfBrokenDreams.mp3 & 22022.934161 \\
-      AnthemOfTheAngels.mp3 & 24924.491533 \\
-      WithoutYou.mp3 & 26450.681219 \\
-      JesusOfSuburbia.mp3 & 27148.855861 \\
-      WakeMeUpWhenSeptemberEnds.mp3 & 28272.608190 \\
-      DearAgony.mp3 & 32904.681492 \\
-      Numb.mp3 & 33977.307564 \\
-      SomewhereIBelong.mp3 & 34766.015645 \\
-      IWillNotBow.mp3 & 38595.117180 \\
-      AmericanIdiot.mp3 & 40137.556831 \\ 
-      MeinHerzBrennt.mp3 & 43060.259956 \\
-      NeverGonnaBeAlone.mp3 & 45824.397707 \\
-      IfTodayWasYourLastDay.mp3 & 47578.342873 \\
-      BreakingTheHabit.mp3 & 76704.242089 \\
-      \hline
-    \end{tabular}
-  \end{center}
-\end{table}
-Songs written by Simon and Garfunkel appear towards the top of this list; 'Mrs. Robinson', 'El Condor Pasa', 'A Hazy Shade of Winter', 'Homeward Bound', and several others. These are all composed by the same author that wrote the original song, 'Bridge Over Troubled Water', and share simular instrumentations, melodic structure, and tonal quality. Songs that are ranked similar but not written by Simon and Garfunkel include 'The View Between Villages' and 'Stick Season' (both written by Noah Kahan), 'Heading South' (Zach Bryan), and 'Mr. Forgettable' and 'Miserable Man' (David Kushner). These are all of a similar genre and tonality to Simon and Garfunkels' music, sharing similar instrumentation to 'Bridge Over Troubled Water'. Songs written by artists such as Breaking Benjamin and Nickelback (both rock artists) appear towards the end of the table, with significantly larger distance values. Performing the same operation on 'Numb' by popular rock artist Linkin Park produces the output shown in Table~\ref{CompTab2}. Songs by other rock artists appear prevalent at the top of this table, featuring heavy use of electric guitar and melodic structure. Beyond this surface level analysis, there is not much to quantify exactly how effective this method is at comparing songs. Musical analysis like this is inehrently qualitative, and the best method for determining the efficacy of this comparison method will simply be to apply it to as wide a variety of music as possible, and note any discerpancies that might appear in the tables that it generates. 
+Thus, the similarity between two songs can be approximated from each song's characteristic representation.
+\subsection{Storing Comparison Data}\label{sec:storing}
+Section \eqref{sec:interpreting} shows how a song can be characterized through its frequency data and compared to other songs. This comparison takes the form of a distance metric, representing the proximity of the primary component frequencies for each song. The larger this distance metric, the less similar the two songs are. In order to construct a system which can handle more than two songs, it is necessary to construct a method for storing and accessing data.
+\begin{algorithm}
+  \caption{Saving Song Characterizations}\label{alg:save_char}
+  \begin{algorithmic}
+    \Function{Characterize}{Directory}\Comment{Directory should contain .MP3 files}
+    \If {$D$ does not exist}
+    \State Initialize empty dictionary $D$
+    \EndIf
+    \For {File in Directory}
+    \State C=\Call{Segment}{File}\Comment{C is the Characteristic Array}
+    \If {File not in $D$}
+    \State Append C to $D$, with File as key
+    \State \Call{Compare}{File}
+    \EndIf
+    \EndFor
+    \State \Return{$D$}
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+Algorithm~\eqref{alg:save_char} demonstrates the process for characterizing a directory with multiple .MP3 files and saving their characteristic arrays into a dictionary structure provides fast access and lookup time. Algorithm~\eqref{alg:save_comp} demonstrates the process for comparing 2 songs together and saving their comparison data. The comparison data produced by this function is a list of smaller 3-element lists, where the 3 elements are 'Song 1', 'Song 2', and the 'Distance' between them.
+\begin{algorithm}
+  \caption{Saving Song Comparisons}\label{alg:save_comp}
+  \begin{algorithmic}
+    \Require .MP3 file that is present in $D$
+    \Function{Compare}{File}
+    \State $X_1\gets$ Characteristic Array of File
+    \If {$C$ does not exist}
+    \State Initialize empty array $C$
+    \EndIf
+    \For {OtherFile in $D$}\Comment{OtherFile is every file other than the one passed to the function}
+    \State $X_2\gets$ Characteristic Array of OtherFile
+    \State D$\gets$ distance between $X_1$ and $X_2$\Comment{Uses \eqref{eq:Euclidean}}
+    \State Initialize empty list $L$
+    \State Append to $L$: File, OtherFile, D
+    \If {list containing File and OtherFile not in $C$}
+    \State Append $L$ to $C$
+    \EndIf
+    \EndFor
+    \State \Return $C$
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+Using these two functions and the data structures that they create, a program creates a playlist from a filename taken as an argument. This program searches the list $C$ produced by Algorithm \eqref{alg:save_comp}, searching for any element that contains the input file, then creating a list sorted by distance. Removing all except the top 20 songs produces a 20 song playlist, composed of the songs that are most similar to the input. 
+\section{Results}\label{sec:results}
+Because of the qualitative nature of music, it is challenging to evaluate the system's actual performance. In order to examine how well the system performs, it is necessary to track the results produced using a relatively diverse collection of music files. Using a dataset of around 21 songs, comprised of several songs each from about 7 artists, the system was consistently able to recommend logical sets of songs. One example output for this system is shown in Table~\eqref{tab:CompTab}, producing songs that are similar to 'Bridge Over Troubled Water', by Simon and Garfunkel.
 
 \begin{table}[htbp]
-  \caption{Comparison Output - Numb}
-  \label{CompTab2}
-  \begin{center}
-    \begin{tabular}{|c|c|}
-      \hline
-      \textbf{Song Name} & \textbf{Distance} \\
-      \hline
-      DearAgony.mp3 &  2970.683300\\
-      SomewhereIBelong.mp3 & 4686.380957\\
-      WakeMeUpWhenSeptemberEnds.mp3 &  7347.389843\\
-      JesusOfSuburbia.mp3 &  8834.466303\\
-      AnthemOfTheAngels.mp3 &  9464.236452\\
-      WithoutYou.mp3  & 9656.667749\\
-      IWillNotBow.mp3 & 11976.448806\\
-      NeverGonnaBeAlone.mp3 & 12275.252101\\
-      HolidayBoulevardOfBrokenDreams.mp3 & 12408.432227\\
-      AwakeMySoul.mp3 & 13651.289895\\
-      Kryptonite.mp3 & 15442.333784\\
-      21stCenturyBreakdown.mp3 & 16368.045047\\
-      IntoTheNothing.mp3 & 18786.807675\\
-      21Guns.mp3 & 19094.048465\\
-      OrangeJuice.mp3 & 20480.090985\\
-      BurnBurnBurn.mp3 & 21385.618375\\
-      NorthernAttitude.mp3 & 21416.057050\\
-      FromAustin.mp3 & 21786.282400\\
-      IWillWait.mp3 & 21997.100687\\
-      LastOfTheAmericanGirls.mp3 & 22587.683924\\
-      SomethingInTheOrange.mp3 & 23149.128868\\
-      AmericanIdiot.mp3 & 23491.271419\\
-      Burn.mp3 & 23646.102266\\
-      VivaLaVida.mp3 & 24377.637756\\
-      MiserableMan.mp3 & 24498.824598\\
-      It'sNotMyTime.mp3 & 24629.107152\\
-      DuHast.mp3 & 25359.161402\\
-      Someday.mp3 & 25848.268380\\
-      MrForgettable.mp3 & 25910.026811\\
-      LetMeBeMyself.mp3 & 27539.609328\\
-      StickSeason.mp3 & 30621.406412\\
-      TheDanglingConversation.mp3 & 30911.407496\\
-      IfTodayWasYourLastDay.mp3 & 31312.307911\\
-      MeinHerzBrennt.mp3 & 31700.800905\\
-      HomewardBound.mp3 & 32754.494395\\
-      ScarboroughFair.mp3 & 33704.533482\\
-      BridgeOverTroubledWater.mp3 & 33977.307564\\
-      TheBoxer.mp3 & 34604.245269\\
-      MrsRobinson.mp3 & 34977.982150\\
-      TheViewBetweenVillages.mp3 & 35506.735113\\
-      HeadingSouth.mp3 & 36104.552918\\
-      AHazyShadeOfWinter.mp3 & 37514.935606\\
-      ElCondorPasa.mp3 & 37784.515983\\
-      BreakingTheHabit.mp3 & 43554.306409\\
-      \hline
+    \centering
+    \caption{Comparison Output - Bridge Over Troubled Water}\label{tab:CompTab}
+    \begin{tabular}{lr}
+      \toprule
+      \textbf{Song} & \textbf{Distance} \\
+      \midrule
+      MrsRobinson.mp3 & 17833.007342 \\
+      ElCondorPasa.mp3 & 18187.548751 \\
+      AHazyShadeOfWinter.mp3 & 30014.763253 \\
+      StickSeason.mp3 & 33366.085974 \\
+      TheViewBetweenVillages.mp3 & 39553.522808 \\
+      TheBoxer.mp3 & 42437.789784 \\
+      HeadingSouth.mp3 & 42465.180760 \\
+      HomewardBound.mp3 & 45135.042716 \\
+      MrForgettable.mp3 & 47201.975596 \\
+      Someday.mp3 & 47231.605537 \\
+      \midrule
+      $\vdots$ & $\vdots$ \\
+      \midrule
+      NeverGonnaBeAlone.mp3 & 176914.812287 \\
+      IfTodayWasYourLastDay.mp3 & 178549.798450 \\
+      AmericanIdiot.mp3 & 188508.497539 \\
+      MeinHerzBrennt.mp3 & 218351.289405 \\
+      BreakingTheHabit.mp3 & 285998.454949 \\
+      \bottomrule
     \end{tabular}
-  \end{center}
+  \end{table}
+This table displays song name and the 'Distance' metric, representing the similarity of the two songs. The top 10 songs are those that the program determined most similar to the input song, which is a good assessment. Those displayed at the top of the table are the same genre as the input, and many are written by the same artist. Conversely, the last rows in the table show the songs that the system found to be least similar, featuring songs with a dramatically different genre. The program consistantly produces similar results, generating playlists that are as similar to the initial song as the limited dataset allows. Performing the same operation on 'Breaking the Habit' by popular rock artist Linkin Park produces the output shown in Table~\eqref{tab:CompTab2}. Songs by other rock artists appear prevalent at the top of this table, while less similar songs appear toward the bottom. 
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison Output: Breaking the Habit}\label{tab:CompTab2}
+  \begin{tabular}{lr}
+    \toprule
+    \textbf{Song} & \textbf{Distance} \\
+    \midrule
+    LosingMyLife.mp3 & 167792.443135 \\
+    AwakeMySoul.mp3 & 177931.103088 \\
+    IWillNotBow.mp3 & 195567.314209 \\
+    WatchTheWorldBurn.mp3 & 219692.835879 \\
+    IWillWait.mp3 & 219933.052561 \\
+    It'sNotMyTime.mp3 & 224138.133323 \\
+    21stCenturyBreakdown.mp3 & 229613.249743 \\
+    Numb.mp3 & 234717.128844 \\
+    IntoTheNothing.mp3 & 240318.799362 \\
+    ScarboroughFair.mp3 & 240868.302800 \\
+    \midrule
+    $\vdots$ & $\vdots$ \\
+    \midrule
+    AnthemOfTheAngels.mp3 & 300251.679696 \\
+    Burn.mp3 & 302620.855625 \\
+    DuHast.mp3 & 309728.869723 \\
+    AmericanIdiot.mp3 & 316130.617928 \\
+    NeverGonnaBeAlone.mp3 & 331907.954410 \\
+    \bottomrule
+  \end{tabular}
 \end{table}
+
+On the whole, the system produces remarkably reliable data. The top 10 songs in each playlist are a good match for the input song, and represent a close match to the genre, tone, and musical quality. These topics are not discussed in depth in this paper, but more information can be found in \cite{gothamOPENMUSICTHEORY2021}, \cite{hongdanIntelligentMusicGenre2022}, or \cite{silverGenreComplexesPopular2016}. One interesting anomaly the appeared regularly across a range of trials was the 'median' data. There were a consistant subset of songs that appeared toward the middle of the table, regardless of the input song. This may simply be a factor of the dataset, and a potential lack of size or diversity. Further research opportunities could explore this phenomena, or explore other features that could be used to classify a song, such as tempo or frequency distribution, see \cite{mengMusicGenreClassification} for more information.
 
 \section{Conclusion}
 This paper has explored the application of digital signal processing techniques to the classification and comparison of audio files, and the efficacy of these techniques for generating song recommendations. Analyzing the frequency content of audio signals and comparing them based on distance metrics proved to be an effective method for organizing songs, and demonstrates the application of frequency analysis for song recommendation. Experimental results show promising outcomes, with songs sorted in a seemingly logical order based on musical attributes, genre, and general composition. While the qualitative nature of music analysis presents challenges in evaluating system performance, this approach offers a promising foundation for further research and development in personalized music recommendation systems. Future work could involve refining the algorithm to provide results that better differentiate between extremely similar songs, improving the speed of the system, and exploring additional features in order to enhance the accuracy and relevance of music recommendations.
 
-                                                      
-
-
 \section{Bibliography}
-\begin{thebibliography}{00}
-
-\bibitem{spotify_guide} Dmitry Pastukhov, ``How the Spotify
-  Recommendation System Works: A Complete Guide,'' Available online:
-  \url{https://www.music-tomorrow.com/blog/how-spotify-recommendation-system-works-a-complete-guide-2022}.
-
-\bibitem{shazam_article} Jovan Jovanovic, ``Shazam It!: Music Processing, Fingerprinting, and Recognition,'' Available online: \url{https://www.toptal.com/algorithms/shazam-it-music-processing-fingerprinting-and-recognition}.
-
-\bibitem{dft_meaning} ``What Is the Meaning of the DFT?,'' Available online: \url{https://dsp.stackexchange.com/questions/5915/what-is-the-meaning-of-the-dft}.
-
-\bibitem{frequency_bin} ``What Is a Frequency Bin?,'' Available online: \url{https://dsp.stackexchange.com/questions/26927/what-is-a-frequency-bin}.
-
-\bibitem{fft_bin_width} ``FFT Bin Width Clarification,'' Available online: \url{https://stackoverflow.com/questions/10754549/fft-bin-width-clarification}.
-
-\bibitem{python_fft} ``Fast Fourier Transform in Python,'' Available online: \url{https://pythonnumericalmethods.studentorg.berkeley.edu/notebooks/chapter24.03-Fast-Fourier-Transform.html}.
-
-\bibitem{note_frequencies} ``Note Frequencies,'' Available online: \url{https://muted.io/note-frequencies/}.
-
-\bibitem{music_scales} ``Major Scales,'' Available online: \url{https://rwu.pressbooks.pub/musictheory/chapter/major-scales/}.
-
-\bibitem{common_scales} ``Common Music Scales,'' Available online: \url{https://www.onlinepianocoach.com/common-music-scales.html}.
-
-\bibitem{instrument_spectrum} ``Frequency Spectrum of Common Musical Instruments,'' Available online: \url{https://www.petervis.com/hi-fi-info/jvc-sea-graphic-equalizers/frequency-spectrum-of-common-musical-instruments.html}.
-
-\end{thebibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{/home/csj7701/roam/Assets/references.bib}
 
 \end{document}
 
