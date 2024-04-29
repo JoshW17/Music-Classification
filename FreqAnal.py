@@ -102,7 +102,7 @@ class FrequencyAnalysis:
                 i+=1
             return i
 
-        def characterize():
+        def polar_characterize():
             characterizations=[[0,0,0] for _ in range(len(self.bins))]
             bin_values=[ [0,0] for _ in range(len(self.bins)) ]
             for freq in range(self.bins[0], self.bins[-1]):
@@ -115,6 +115,20 @@ class FrequencyAnalysis:
                     bin_values[bin][1]=np.angle(self.frequency_domain_signal[freq])
                     # Create an array of polar coordinates. These polar coordinates represent the BIN with the largest magnitude per SEGMENT.
             return bin_values
+
+        def characterize():
+            characterizations=[[0,0,0] for _ in range(len(self.bins))]
+            bin_values=[ [0,0] for _ in range(len(self.bins)) ]
+            for freq in range(self.bins[0], self.bins[-1]):
+                magnitude=np.log(np.abs(self.frequency_domain_signal[freq]))
+                bin=get_bin(freq)
+                if magnitude > characterizations[bin][0]:
+                    characterizations[bin][0]=magnitude
+                    characterizations[bin][1]=freq
+                    bin_values[bin]=self.frequency_domain_signal[freq]
+                    # Create an array of polar coordinates. These polar coordinates represent the BIN with the largest magnitude per SEGMENT.
+            return bin_values
+
 
         self.bins=get_bin_indeces()
             
