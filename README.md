@@ -1,5 +1,4 @@
-# Music-Classification
-Project for DSP class to determine how similar songs are and then give recommendations based on how similar a song is to the one your listening to.
+Exploration of music classification strategies using digital signal processing techniques.
 
-
-![image](https://github.com/JoshW17/Music-Classification/assets/89046683/fe96e1c2-acaf-44e2-bee8-d2ac3bad037e)
+This began as a project for LT Ledzian's DSP class. 
+Forked from the original repository for my own personal exploration.

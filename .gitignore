@@ -1,0 +1,16 @@
+/assets/images/*.jpg
+/assets/images/*.png
+/assets/*.mp3
+CompData
+SongData
+FullCompData
+FullCompData
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+References/*
+Class-Documents/*
